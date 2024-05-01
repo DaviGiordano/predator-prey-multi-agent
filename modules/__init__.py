@@ -1,2 +1,2 @@
-from modules.adversaries.default import DefaultAdversary
-from modules.agents.default import DefaultAgent
+from modules.adversaries.default_adversary import DefaultAdversary
+from modules.agents.default_agent import DefaultAgent
