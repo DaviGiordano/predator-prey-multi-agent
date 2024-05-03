@@ -1,11 +1,12 @@
 from pettingzoo.mpe import simple_tag_v3
+
 from modules.actors import *
 
 CYCLES = 25
 
 class Simulation():
 
-    def __init__(self, strategy='default', render='human'):
+    def __init__(self, strategy='default', render=None):
         self.env = simple_tag_v3.parallel_env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=CYCLES, continuous_actions=False, render_mode=render)
         self.observations, self.infos = self.env.reset()
         self.n_steps = 0
@@ -57,3 +58,13 @@ class Simulation():
     def __getitem__(self, name):
         return self.actors[name]
 
+
+
+if __name__=='__main__':
+    s = Simulation(strategy="random", render=None)
+    while True:
+        print(s.run())
+        x = input('-')
+        if x != "":
+            exec(x)
+        s.reset()
