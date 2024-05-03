@@ -1,13 +1,11 @@
-from pettingzoo.mpe import simple_tag_v3
-import json
-env = simple_tag_v3.parallel_env(num_good=1, num_adversaries=1, num_obstacles=0, max_cycles=1, continuous_actions=False, render_mode='ansi')
-observations, infos = env.reset()
+from modules.simulation import Simulation
 
-while env.agents:
-    # this is where you would insert your policy
-    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
-    # It seems that the good agents have position and velocity information, while the adversaries do not
-    observations, rewards, terminations, truncations, infos = env.step(actions)
-    print(len(observations['adversary_0']))
-    print((observations['adversary_0']))
-env.close()
+N_SIMS = 10
+i = 0
+s = Simulation(strategy='random')
+while i < N_SIMS:
+    print(f"Simulation {i}/{N_SIMS}")
+    print(s.run())
+    s.reset()
+    i += 1
+

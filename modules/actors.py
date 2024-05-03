@@ -1,4 +1,4 @@
-from constants import action_codes
+from modules.constants import action_codes
 from random import randint
 
 #################################################################

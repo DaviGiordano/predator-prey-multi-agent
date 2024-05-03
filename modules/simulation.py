@@ -1,5 +1,5 @@
 from pettingzoo.mpe import simple_tag_v3
-from actors import *
+from modules.actors import *
 
 CYCLES = 25
 
@@ -57,13 +57,3 @@ class Simulation():
     def __getitem__(self, name):
         return self.actors[name]
 
-
-
-if __name__=='__main__':
-    s = Simulation(strategy="random", render=None)
-    while True:
-        print(s.run())
-        x = input('-')
-        if x != "":
-            exec(x)
-        s.reset()
