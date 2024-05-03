@@ -7,6 +7,8 @@ CYCLES = 25
 class Simulation():
 
     def __init__(self, strategy='default', render=None):
+        self.strategy = strategy
+        self.render = render
         self.env = simple_tag_v3.parallel_env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=CYCLES, continuous_actions=False, render_mode=render)
         self.observations, self.infos = self.env.reset()
         self.n_steps = 0
@@ -25,7 +27,7 @@ class Simulation():
 
 
     def reset(self):
-        self.__init__()
+        self.__init__(self.strategy, self.render)
 
 
     def total_reward_prey(self):
