@@ -1,6 +1,6 @@
 from pettingzoo.mpe import simple_tag_v3
 import json
-env = simple_tag_v3.parallel_env(num_good=1, num_adversaries=1, num_obstacles=0, max_cycles=1, continuous_actions=False, render_mode=None)
+env = simple_tag_v3.parallel_env(num_good=1, num_adversaries=1, num_obstacles=0, max_cycles=1, continuous_actions=False, render_mode='ansi')
 observations, infos = env.reset()
 
 while env.agents:
