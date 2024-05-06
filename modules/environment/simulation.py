@@ -1,6 +1,7 @@
 from pettingzoo.mpe import simple_tag_v3
+import modules.actors.adversaries as adv
+import modules.actors.agents as ag
 
-from modules.actors import *
 
 CYCLES = 25
 
@@ -14,11 +15,11 @@ class Simulation():
         self.n_steps = 0
 
         if strategy == 'default':
-            self.actors = {agent:DefaultAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':DefaultAgent('agent_0', self.observations['agent_0'])})
+            self.actors = {agent:adv.BaseAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors.update({'agent_0':ag.BaseAgent('agent_0', self.observations['agent_0'])})
         elif strategy == 'random':
-            self.actors = {agent:RandomAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':RandomAgent('agent_0', self.observations['agent_0'])})
+            self.actors = {agent:adv.RandomAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
 #        elif strategy == 'greedy':
 #            self.actors = {agent:GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
 #        ...
