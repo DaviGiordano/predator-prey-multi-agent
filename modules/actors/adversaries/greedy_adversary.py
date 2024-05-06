@@ -23,5 +23,6 @@ class GreedyAdversary(BaseAdversary):
                 action = act['move_down']
             elif dy > 0:  # Prey is above
                 action = act['move_up']
-        
+        if abs(dx) < 0. and abs(dy) < 0.1:
+            action = act['no_action']
         return action
