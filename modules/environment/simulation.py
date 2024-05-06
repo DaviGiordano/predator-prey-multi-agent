@@ -3,7 +3,7 @@ import modules.actors.adversaries as adv
 import modules.actors.agents as ag
 
 
-CYCLES = 25
+CYCLES = 50
 
 class Simulation():
 
@@ -20,9 +20,13 @@ class Simulation():
         elif strategy == 'random':
             self.actors = {agent:adv.RandomAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
             self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
-#        elif strategy == 'greedy':
-#            self.actors = {agent:GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-#        ...
+        elif strategy == 'greedy':
+            self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
+        
+        # Example code for adding new adversaries
+        # elif strategy == 'greedy':
+        #    self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         else:
             raise NotImplementedError
 
