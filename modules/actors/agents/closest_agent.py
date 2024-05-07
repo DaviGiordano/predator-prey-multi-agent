@@ -26,7 +26,7 @@ class ClosestAgent(BaseAgent):
                 yb = yi
         
         #now move furthest away from closest adversary
-        if abs(xb) < abs(yb): # Horizontal distance is smaller
+        if abs(xb) > abs(yb): # Horizontal distance is smaller
             if xb < 0:  # Adv is to the left
                 action = act['move_right']
             elif xb > 0:  # Adv is to the right
