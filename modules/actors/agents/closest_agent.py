@@ -18,7 +18,7 @@ class ClosestAgent(BaseAgent):
             xi = self.last_observation[f'adv{i}_relpos_x']
             yi = self.last_observation[f'adv{i}_relpos_y']
 
-            #compare adversary i with 0
+            #compare adversary i with best
             dist_i = math.sqrt(xi**2 + yi**2)
             if dist_i < best_dist:
                 best_dist = dist_i
