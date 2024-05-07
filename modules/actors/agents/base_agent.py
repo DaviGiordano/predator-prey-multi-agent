@@ -18,9 +18,9 @@ class BaseAgent(BaseActor):
             'land2_relpos_x': observation[6],
             'land2_relpos_y': observation[7],
             'adv0_relpos_x': observation[8],
-            'avd0_relpos_y': observation[9],
+            'adv0_relpos_y': observation[9],
             'adv1_relpos_x': observation[10],
-            'avd1_relpos_y': observation[11],
+            'adv1_relpos_y': observation[11],
             'adv2_relpos_x': observation[12],
-            'avd2_relpos_y': observation[13]
+            'adv2_relpos_y': observation[13]
         }
