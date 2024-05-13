@@ -1,5 +1,5 @@
 from modules.actors.adversaries import BaseAdversary
-from modules.actors.constants import action_codes as act
+from modules.actors.utils import action_codes as act
 class GreedyAdversary(BaseAdversary):
     ''' ... '''
     def __init__(self, id, initial_observation):

@@ -1,4 +1,4 @@
-from modules.actors.constants import action_codes
+from modules.actors.utils import action_codes
 
 class BaseActor:
     ''' Parent class for both predators and prey '''

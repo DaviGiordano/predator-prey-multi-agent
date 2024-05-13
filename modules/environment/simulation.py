@@ -20,8 +20,14 @@ class Simulation():
         elif strategy == 'random':
             self.actors = {agent:adv.RandomAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
             self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
-        elif strategy == 'greedy':
+        elif strategy == 'greedy-random':
             self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
+        elif strategy == 'greedy-greedy':
+            self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
+        elif strategy == 'surround-greedy':
+            self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
             self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
         
         # Example code for adding new adversaries
@@ -46,6 +52,8 @@ class Simulation():
     def _step(self):
         actions = {actor: self.actors[actor].get_action() for actor in self.env.agents}
         observations, rewards, terminations, truncations, infos = self.env.step(actions)
+        # logging.info(f'Observation at step {self.n_steps}: {observations}')
+
         for actor in self.actors.keys():
             self.actors[actor].update(observations[actor], actions[actor], rewards[actor])
         self.n_steps += 1

@@ -1,5 +1,5 @@
 from modules.actors.agents import BaseAgent
-from modules.actors.constants import action_codes as act
+from modules.actors.utils import action_codes as act
 import math
 
 class ClosestAgent(BaseAgent):
@@ -7,11 +7,16 @@ class ClosestAgent(BaseAgent):
         super().__init__(id, initial_observation)
 
     def get_action(self):
+        
+        print("self.last_observation['pos_x']",self.last_observation['pos_x'])
+        print("self.last_observation['pos_y']",self.last_observation['pos_y'])
+        print("sum(self.reward_history)",sum(self.reward_history))
 
         xb = self.last_observation['adv0_relpos_x']
         yb = self.last_observation['adv0_relpos_y']
-        
-        best_dist = math.sqrt(xb**2 + yb**2)
+        best_dist = abs(xb) + abs(yb)
+
+
 
         #find closest adversary
         for i in range(1, 3):
@@ -19,7 +24,8 @@ class ClosestAgent(BaseAgent):
             yi = self.last_observation[f'adv{i}_relpos_y']
 
             #compare adversary i with best
-            dist_i = math.sqrt(xi**2 + yi**2)
+            dist_i = abs(xi) + abs(yi)
+            
             if dist_i < best_dist:
                 best_dist = dist_i
                 xb = xi

@@ -1,3 +1,5 @@
+import numpy as np
+
 action_codes = {
     'no_action': 0,
     'move_left': 1,

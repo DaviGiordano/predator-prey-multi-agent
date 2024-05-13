@@ -24,3 +24,5 @@ class BaseAgent(BaseActor):
             'adv2_relpos_x': observation[12],
             'adv2_relpos_y': observation[13]
         }
+    def get_action(self):
+        pass
