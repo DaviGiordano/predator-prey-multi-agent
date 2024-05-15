@@ -1,6 +1,5 @@
 from modules.actors.agents import BaseAgent
 from modules.actors.utils import action_codes as act
-import math
 
 class ClosestAgent(BaseAgent):
     def __init__(self, id, initial_observation):

@@ -28,7 +28,7 @@ class Simulation():
             self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
         elif strategy == 'surround-greedy':
             self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
+            self.actors.update({'agent_0':ag.BoundedAgent('agent_0', self.observations['agent_0'])})
         
         # Example code for adding new adversaries
         # elif strategy == 'greedy':
