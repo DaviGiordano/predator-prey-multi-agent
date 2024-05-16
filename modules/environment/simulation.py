@@ -26,7 +26,10 @@ class Simulation():
         elif strategy == 'greedy-greedy':
             self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
             self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
-        elif strategy == 'surround-greedy':
+        elif strategy == 'greedy-bounded':
+            self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors.update({'agent_0':ag.BoundedAgent('agent_0', self.observations['agent_0'])})
+        elif strategy == 'surround-bounded':
             self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
             self.actors.update({'agent_0':ag.BoundedAgent('agent_0', self.observations['agent_0'])})
         
