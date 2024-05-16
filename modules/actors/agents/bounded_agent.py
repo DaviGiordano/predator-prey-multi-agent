@@ -10,54 +10,55 @@ class BoundedAgent(BaseAgent):
         
         x = self.last_observation['pos_x']
         y = self.last_observation['pos_y']
-        print("sum(self.reward_history)",sum(self.reward_history))
+        print("sum(self.reward_history)", sum(self.reward_history))
 
-        #array of probabilities for each action
+        # Array of probabilities for each action
         p = [0.2 for _ in range(5)]
 
-        #arrys of relative distances to closest advsersaries in each direction
-        adv = [0 for _ in range(4)]        
+        # Dictionary of relative distances to closest adversaries in each direction
+        min_distances = {
+            'up': -1,
+            'down': -1,
+            'left': -1,
+            'right': -1
+        }
 
-        # check closest adversaries
-        for i in range(3):
+        # Check closest adversaries
+        for i in range(3):  # Assuming there are 3 adversaries
             xi = self.last_observation[f'adv{i}_relpos_x']
             yi = self.last_observation[f'adv{i}_relpos_y']
 
             if yi > 0:  # Adversary is above
-                if adv[0] == -1 or yi < adv[0]:
-                    adv[0] = abs(yi)
+                if min_distances['up'] == -1 or yi < min_distances['up']:
+                    min_distances['up'] = abs(yi)
             elif yi < 0:  # Adversary is below
-                if adv[1] == -1 or -yi < adv[1]:
-                    adv[1] = abs(yi)
+                if min_distances['down'] == -1 or -yi < min_distances['down']:
+                    min_distances['down'] = abs(yi)
             if xi < 0:  # Adversary is to the left
-                if adv[2] == -1 or -xi < adv[2]:
-                    adv[2] = abs(xi)
+                if min_distances['left'] == -1 or -xi < min_distances['left']:
+                    min_distances['left'] = abs(xi)
             elif xi > 0:  # Adversary is to the right
-                if adv[3] == -1 or xi < adv[3]:
-                    adv[3] = abs(xi)
+                if min_distances['right'] == -1 or xi < min_distances['right']:
+                    min_distances['right'] = abs(xi)
 
         # Adjust probabilities based on the proximity of adversaries
         max_distance = 1.8
 
-        if adv[0] != -1:  # Adversary above
-            p[3] += (max_distance - adv[0]) / max_distance  # Increase prob of moving down
-        if adv[1] != -1:  # Adversary below
-            p[4] += (max_distance - adv[1]) / max_distance  # Increase prob of moving up
-        if adv[2] != -1:  # Adversary to the left
-            p[2] += (max_distance - adv[2]) / max_distance  # Increase prob of moving right
-        if adv[3] != -1:  # Adversary to the right
-            p[1] += (max_distance - adv[3]) / max_distance  # Increase prob of moving left
+        p[act['move_down']] = max_distance if min_distances['down'] == -1 else min_distances['down']
+        p[act['move_up']] = max_distance if min_distances['up'] == -1 else min_distances['up']
+        p[act['move_right']] = max_distance if min_distances['right'] == -1 else min_distances['right']
+        p[act['move_left']] = max_distance if min_distances['left'] == -1 else min_distances['left']
 
-        #check bounds
+        # Check bounds
         if x > 0.9:
-            p[2] = 0
+            p[act['move_right']] = 0
         elif x < -0.9:
-            p[1] = 0
+            p[act['move_left']] = 0
         
         if y > 0.9:
-            p[4] = 0
+            p[act['move_up']] = 0
         elif y < -0.9:
-            p[3] = 0
+            p[act['move_down']] = 0
 
         # Normalize probabilities
         total_p = sum(p)
