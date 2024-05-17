@@ -39,7 +39,7 @@ class Simulation():
 
 
     def reset(self):
-        self.__init__(self.strategy, self.render)
+        self.__init__(self.adv_strategy, self.ag_strategy, self.render)
 
 
     def total_reward_prey(self):
