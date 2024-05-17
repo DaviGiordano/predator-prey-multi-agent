@@ -7,32 +7,33 @@ CYCLES = 50
 
 class Simulation():
 
-    def __init__(self, strategy='default', render=None):
-        self.strategy = strategy
+    def __init__(self, adv_strategy='default', ag_strategy='default', render=None):
+        self.adv_strategy = adv_strategy
+        self.ag_strategy = ag_strategy
         self.render = render
         self.env = simple_tag_v3.parallel_env(num_good=1, num_adversaries=3, num_obstacles=2, max_cycles=CYCLES, continuous_actions=False, render_mode=render)
         self.observations, self.infos = self.env.reset()
         self.n_steps = 0
-
-        if strategy == 'default':
-            self.actors = {agent:adv.BaseAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':ag.BaseAgent('agent_0', self.observations['agent_0'])})
-        elif strategy == 'random':
-            self.actors = {agent:adv.RandomAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
-        elif strategy == 'greedy-random':
-            self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
-        elif strategy == 'greedy-greedy':
-            self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
-        elif strategy == 'surround-greedy':
-            self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
-            self.actors.update({'agent_0':ag.BoundedAgent('agent_0', self.observations['agent_0'])})
         
-        # Example code for adding new adversaries
-        # elif strategy == 'greedy':
-        #    self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+        if adv_strategy == 'default':
+            self.actors = {agent:adv.BaseAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+        elif adv_strategy == 'random':
+            self.actors = {agent:adv.RandomAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+        elif adv_strategy == 'greedy':
+            self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+        elif adv_strategy == 'surround':
+            self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+        else:
+            raise NotImplementedError
+        
+        if ag_strategy == 'default':
+            self.actors.update({'agent_0':ag.BaseAgent('agent_0', self.observations['agent_0'])})
+        elif ag_strategy == 'random':
+            self.actors.update({'agent_0':ag.RandomAgent('agent_0', self.observations['agent_0'])})
+        elif ag_strategy == 'greedy':
+            self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
+        elif ag_strategy == 'bounded':
+            self.actors.update({'agent_0':ag.BoundedAgent('agent_0', self.observations['agent_0'])})
         else:
             raise NotImplementedError
 
