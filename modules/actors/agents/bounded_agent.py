@@ -8,9 +8,6 @@ class BoundedAgent(BaseAgent):
     def __init__(self, id, initial_observation):
         super().__init__(id, initial_observation)
 
-        # In this class, numpy arrays always have the following structure:
-        # UP, DOWN, LEFT, RIGHT
-
     def get_legal_moves(self):
         # Returns a dictionary of moves and 
         # whether they are legal (True) or not (False)
@@ -30,11 +27,8 @@ class BoundedAgent(BaseAgent):
 
     def get_adv_direction(self, rel_x, rel_y):
         vertical_direction = 'up' if rel_y >= 0 else 'up'
-        horizontal_direction = 'right' if rel_x >- 0 else 'left'
+        horizontal_direction = 'right' if rel_x >= 0 else 'left'
         return vertical_direction, horizontal_direction
-
-    def get_nearest_agent_by_direction(self, distance_to_adv, direction_of_adv):
-        pass        
 
     def get_action(self):
         
@@ -81,19 +75,18 @@ class BoundedAgent(BaseAgent):
             elif 'right' in directions_of_adv[f'adv{i}'] and distance_to_adv[f'adv{i}'] < min_distances['right']:
                 min_distances['right'] = distance_to_adv[f'adv{i}']
         
-        print(move_legality, directions_of_adv, distance_to_adv, min_distances)
-
-        distances = np.array([min_distances['up'], min_distances['down'], min_distances['left'], min_distances['right']])
-        valid = np.array([move_legality['up'], move_legality['down'], move_legality['left'], move_legality['right']])
+        action_codes = {
+            'no_action': 0,
+            'move_left': 1,
+            'move_right': 2,
+            'move_down': 3,
+            'move_up': 4
+        }
+        distances = np.array([0, min_distances['left'], min_distances['right'], min_distances['down'], min_distances['up']])
+        valid = np.array([0, move_legality['left'], move_legality['right'], move_legality['down'], move_legality['up']])
 
         masked_distances = np.where(valid, distances, 0)
-        exp_distances = np.exp(masked_distances)
+        
+        print(masked_distances, np.argmax(masked_distances))
 
-        # Normalize probabilities
-        total = exp_distances.sum()
-        if total > 0:
-            act_prob = exp_distances / total
-        else:
-            act_prob = np.zeros_like(exp_distances)
-
-        return random.choices([act['move_up'], act['move_down'], act['move_left'], act['move_right']], act_prob)[0]
+        return np.argmax(masked_distances)
