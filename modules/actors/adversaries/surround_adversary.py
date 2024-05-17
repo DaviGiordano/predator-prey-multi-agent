@@ -46,7 +46,7 @@ class SurroundAdversary(BaseAdversary):
         prey = np.array([prey_x, prey_y])
 
         # Calculate vector from centroid to the known vertex
-        vector_ag = follower - prey
+        vector_ag = prey - follower
 
         # Apply rotations to find the other two vertices
         vertex_1 = prey + np.dot(rotation_plus_60, vector_ag)
