@@ -7,7 +7,7 @@ class BaseAdversary(BaseActor):
         super().__init__(id, initial_observation)
 
     def parse_observation(self, observation):
-        self.last_observation = {
+        last_observation = {
             'vel_x': observation[0],
             'vel_y': observation[1],
             'pos_x': observation[2],
@@ -25,6 +25,7 @@ class BaseAdversary(BaseActor):
             'ag_relvel_x': observation[14],
             'ag_relvel_y': observation[15],
         }
+        return last_observation
 
 
     def get_absolute_position(self, actor):

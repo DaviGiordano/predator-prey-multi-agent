@@ -8,7 +8,7 @@ class BaseAgent(BaseActor):
 
     def parse_observation(self, observation):
         # Now properly overriding the parent class method
-        self.last_observation = {
+        last_observation = {
             'vel_x': observation[0],
             'vel_y': observation[1],
             'pos_x': observation[2],
@@ -24,5 +24,6 @@ class BaseAgent(BaseActor):
             'adv2_relpos_x': observation[12],
             'adv2_relpos_y': observation[13]
         }
+        return last_observation
     def get_action(self):
         pass
