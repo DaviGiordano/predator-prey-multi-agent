@@ -3,7 +3,7 @@ import modules.actors.adversaries as adv
 import modules.actors.agents as ag
 
 
-CYCLES = 50
+CYCLES = 25
 
 class Simulation():
 
@@ -25,7 +25,7 @@ class Simulation():
             self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         elif adv_strategy == 'intercept':
             self.actors = {agent:adv.InterceptAdversary(agent, self.observations[agent], 1.5) for agent in self.env.agents[:-1]}
-        elif strategy == 'distract-pursue':
+        elif adv_strategy == 'distract-pursue':
             self.actors = {agent:adv.DistractPursueAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         else:
             raise NotImplementedError
