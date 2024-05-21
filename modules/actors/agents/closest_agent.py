@@ -7,9 +7,9 @@ class ClosestAgent(BaseAgent):
 
     def get_action(self):
         
-        print("self.last_observation['pos_x']",self.last_observation['pos_x'])
-        print("self.last_observation['pos_y']",self.last_observation['pos_y'])
-        print("sum(self.reward_history)",sum(self.reward_history))
+        #print("self.last_observation['pos_x']",self.last_observation['pos_x'])
+        #print("self.last_observation['pos_y']",self.last_observation['pos_y'])
+        #print("sum(self.reward_history)",sum(self.reward_history))
 
         xb = self.last_observation['adv0_relpos_x']
         yb = self.last_observation['adv0_relpos_y']

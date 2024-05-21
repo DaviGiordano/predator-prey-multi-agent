@@ -10,7 +10,6 @@ class BoundedAgent(BaseAgent):
         
         x = self.last_observation['pos_x']
         y = self.last_observation['pos_y']
-        print("sum(self.reward_history)", sum(self.reward_history))
 
         # Array of probabilities for each action
         p = [0.2 for _ in range(5)]

@@ -1,4 +1,5 @@
 from modules.actors.base_actor import BaseActor
+import math
 
 class BaseAdversary(BaseActor):
     ''' Default predator class'''
@@ -24,3 +25,24 @@ class BaseAdversary(BaseActor):
             'ag_relvel_x': observation[14],
             'ag_relvel_y': observation[15],
         }
+
+
+    def get_absolute_position(self, actor):
+        my_x = self.last_observation['pos_x']
+        my_y = self.last_observation['pos_y']
+        advA_x = self.last_observation['advA_relpos_x'] + my_x
+        advA_y = self.last_observation['advA_relpos_y'] + my_y
+        advB_x = self.last_observation['advB_relpos_x'] + my_x
+        advB_y = self.last_observation['advB_relpos_y'] + my_y
+        prey_x = self.last_observation['ag_relpos_x'] + my_x
+        prey_y = self.last_observation['ag_relpos_y'] + my_y
+
+        if actor == 'self':
+            return my_x, my_y
+        elif actor == 'advA':
+            return advA_x, advA_y
+        elif actor == 'advB':
+            return advB_x, advB_y
+        elif actor == 'prey':
+            return prey_x, prey_y
+

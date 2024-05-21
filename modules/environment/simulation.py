@@ -23,6 +23,10 @@ class Simulation():
             self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         elif adv_strategy == 'surround':
             self.actors = {agent:adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+        elif adv_strategy == 'intercept':
+            self.actors = {agent:adv.InterceptAdversary(agent, self.observations[agent], 1.5) for agent in self.env.agents[:-1]}
+        elif strategy == 'distract-pursue':
+            self.actors = {agent:adv.DistractPursueAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         else:
             raise NotImplementedError
         
@@ -34,6 +38,9 @@ class Simulation():
             self.actors.update({'agent_0':ag.ClosestAgent('agent_0', self.observations['agent_0'])})
         elif ag_strategy == 'bounded':
             self.actors.update({'agent_0':ag.BoundedAgent('agent_0', self.observations['agent_0'])})
+        # Example code for adding new adversaries
+        # elif strategy == 'greedy':
+        #    self.actors = {agent:adv.GreedyAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         else:
             raise NotImplementedError
 
@@ -74,13 +81,3 @@ class Simulation():
     def __getitem__(self, name):
         return self.actors[name]
 
-
-
-if __name__=='__main__':
-    s = Simulation(strategy="random", render=None)
-    while True:
-        print(s.run())
-        x = input('-')
-        if x != "":
-            exec(x)
-        s.reset()

@@ -1,19 +1,50 @@
 from modules.environment.simulation import Simulation
+import matplotlib.pyplot as plt
 import pygame
 import os
 # Set the window position before initializing Pygame
 x, y = 50, 100   # Set the desired window position
 os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x},{y}"
-if __name__ == "__main__":    
-    N_SIMS = 1
+
+
+def n_simulations(n_sims, strategies):
     i = 0
-    s = Simulation(adv_strategy='greedy', ag_strategy='bounded', render='human')
-    pygame.display.set_mode((100, 100))
-    while i < N_SIMS:
-        print(f"Simulation {i}/{N_SIMS}")
+    first_catch_arr = []
+    num_catches_arr = []
+    s = Simulation(adv_strategy=strategies[0], ag_strategy=strategies[1], render=None)
+    while i < n_sims:
         first_catch, num_catches = s.run()
-        print(f'first_catch:{first_catch}\nnum_catches: {num_catches}')
+        first_catch_arr.append(first_catch)
+        num_catches_arr.append(num_catches)
         s.reset()
         i += 1
+    return first_catch_arr, num_catches_arr
+
+
+def boxplot(datasets: list[list[int], ...], title: str, xlabels: list[str]):
+    fig, ax = plt.subplots()
+    ax.boxplot(datasets)
+    ax.set_xticklabels(xlabels)
+    plt.title(title)
+    plt.show()
+
+
+def n_simulation_strategies_with_boxplots(n_sims: int, strategies_list: list[tuple[str]]):
+    first_catch_dataset = []
+    num_catches_dataset = []
+    for strategies in strategies_list:
+        fc, nc = n_simulations(n_sims, strategies)
+        first_catch_dataset.append(fc)
+        num_catches_dataset.append(nc)
+    xlabels = strategies[0] + '+' + strategies[1]
+    boxplot(first_catch_dataset, f"Number of steps until first catch N={n_sims}", strategies_list)
+    boxplot(num_catches_dataset, f"Number of catches, N={n_sims}", strategies_list)
+
+
+if __name__ == "__main__":    
+    #pygame.display.set_mode((100, 100))
+    n_simulation_strategies_with_boxplots(50, [('greedy','bounded'),('surround','bounded'),('intercept','bounded')])
+    
+    
 
 
