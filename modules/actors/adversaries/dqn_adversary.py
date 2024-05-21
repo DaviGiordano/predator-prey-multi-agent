@@ -1,6 +1,7 @@
 from modules.actors.adversaries import BaseAdversary
 from modules.actors.utils import action_codes
 import numpy as np
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -20,7 +21,7 @@ class QNetwork(nn.Module):
 
 class DQNAdversary(BaseAdversary):
     ''' Predator learns using Q-learning'''
-    def __init__(self, id, initial_observation, alpha=0.001, gamma=0.99, epsilon=0.1):
+    def __init__(self, id, initial_observation, weights_path, alpha=0.001, gamma=0.99, epsilon=0.1):
         super().__init__(id, initial_observation)
         self.alpha = alpha  # Learning rate
         self.gamma = gamma  # Discount factor
@@ -32,6 +33,15 @@ class DQNAdversary(BaseAdversary):
         self.q_network = QNetwork(self.input_dim, self.num_actions)
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=self.alpha)
         self.criterion = nn.MSELoss()
+
+        # Create weights directory if it does not exist
+        if not os.path.exists(weights_path):
+            os.makedirs(weights_path)
+        
+        # Check for existing weights and load them if available
+        self.weights_filepath = f"{weights_path}/weights_{id}.pth"
+        if os.path.isfile(self.weights_filepath):
+            self.load_weights(self.weights_filepath)
 
     def get_action(self):
         if random() < self.epsilon:
@@ -54,9 +64,11 @@ class DQNAdversary(BaseAdversary):
         loss.backward()
         self.optimizer.step()
 
+        self.save_weights(self.weights_filepath)
+
     def update(self, observation, action, reward):
         self.update_q_network(self.last_observation, action, reward, observation)
-        self.parse_observation(observation)
+        self.last_observation = self.parse_observation(observation)
         self.observation_history.append(self.last_observation)
         self.action_history.append(action)
         self.reward_history.append(reward)

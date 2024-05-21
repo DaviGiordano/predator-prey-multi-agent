@@ -1,9 +1,7 @@
 from pettingzoo.mpe import simple_tag_v3
 import modules.actors.adversaries as adv
 import modules.actors.agents as ag
-
 CYCLES = 25
-
 class Simulation:
     def __init__(self, adv_strategy='default', ag_strategy='default', render=None):
         self.adv_strategy = adv_strategy
@@ -23,10 +21,10 @@ class Simulation:
             self.actors = {agent: adv.SurroundAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         elif adv_strategy == 'intercept':
             self.actors = {agent:adv.InterceptAdversary(agent, self.observations[agent], 1.5) for agent in self.env.agents[:-1]}
-        elif adv_strategy == 'distract-pursue':
+        elif adv_strategy == 'distract_pursue':
             self.actors = {agent:adv.DistractPursueAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
         elif adv_strategy == 'q_learning':
-            self.actors = {agent: adv.DQNAdversary(agent, self.observations[agent]) for agent in self.env.agents[:-1]}
+            self.actors = {agent: adv.DQNAdversary(agent, self.observations[agent], './dqn_weights') for agent in self.env.agents[:-1]}
         else:
             raise NotImplementedError
 
@@ -38,8 +36,6 @@ class Simulation:
             self.actors.update({'agent_0': ag.ClosestAgent('agent_0', self.observations['agent_0'])})
         elif ag_strategy == 'bounded':
             self.actors.update({'agent_0': ag.BoundedAgent('agent_0', self.observations['agent_0'])})
-        elif ag_strategy == 'q_learning':
-            self.actors.update({'agent_0': ag.DQNAgent('agent_0', self.observations['agent_0'])})
         else:
             raise NotImplementedError
 
@@ -68,16 +64,6 @@ class Simulation:
         else:
             first_catch = -1
         return (first_catch, self.total_reward_predators() / 10)
-
-    def save_weights(self, path):
-        for actor in self.actors.values():
-            if hasattr(actor, 'save_weights'):
-                actor.save_weights(f"{path}_{actor.id}.pth")
-
-    def load_weights(self, path):
-        for actor in self.actors.values():
-            if hasattr(actor, 'load_weights'):
-                actor.load_weights(f"{path}_{actor.id}.pth")
 
     def __getitem__(self, name):
         return self.actors[name]
