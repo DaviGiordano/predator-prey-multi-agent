@@ -13,11 +13,13 @@ def run_n_simulations(n_sims, strategies, render=None):
     num_catches_arr = []
     s = Simulation(adv_strategy=strategies[0], ag_strategy=strategies[1], render=render)
     while i < n_sims:
-        first_catch, num_catches = s.run()
+        print('Simulation:', i)
+        first_catch, total_adv_reward, num_catches = s.run()
         first_catch_arr.append(first_catch)
         num_catches_arr.append(num_catches)
         s.reset()
         i += 1
+        print('First catch:', first_catch,'Total reward:', total_adv_reward, 'Number of catches:', num_catches)
     return first_catch_arr, num_catches_arr
 
 
@@ -43,7 +45,7 @@ def run_n_simulation_strategies_with_boxplots(n_sims: int, strategies_list: list
 
 if __name__ == "__main__":    
     pygame.display.set_mode((50, 50))
-    run_n_simulations(1, ('greedy', 'bounded'), render='human')
+    run_n_simulations(5000, ('q_learning', 'bounded'), render=None)
     # run_n_simulation_strategies_with_boxplots(50, [('greedy','bounded'),('surround','bounded'),('intercept','bounded')])
     
     

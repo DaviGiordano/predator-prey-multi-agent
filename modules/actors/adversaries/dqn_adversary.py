@@ -7,6 +7,9 @@ import torch.nn as nn
 import torch.optim as optim
 from random import randint, random
 
+def get_distance_from_relpos(relpos_x, relpos_y):
+    return np.sqrt(relpos_x**2 + relpos_y**2)
+
 class QNetwork(nn.Module):
     def __init__(self, input_dim, output_dim):
         super(QNetwork, self).__init__()
@@ -64,9 +67,19 @@ class DQNAdversary(BaseAdversary):
         loss.backward()
         self.optimizer.step()
 
-        self.save_weights(self.weights_filepath)
+    def calculate_small_reward(self, observation, reward):
+        previous_distance = get_distance_from_relpos(self.last_observation['ag_relpos_x'], self.last_observation['ag_relpos_y'])
+        new_observation = self.parse_observation(observation)
+        current_distance = get_distance_from_relpos(new_observation['ag_relpos_x'], new_observation['ag_relpos_y'])
+        if (reward == 0) and (current_distance < previous_distance):
+            reward = 1
+        return reward
+            
 
     def update(self, observation, action, reward):
+
+        reward = self.calculate_small_reward(observation, reward)
+        # print(f'New reward agent {self.id}: {reward}')
         self.update_q_network(self.last_observation, action, reward, observation)
         self.last_observation = self.parse_observation(observation)
         self.observation_history.append(self.last_observation)
