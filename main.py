@@ -7,11 +7,11 @@ x, y = 50, 100   # Set the desired window position
 os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x},{y}"
 
 
-def n_simulations(n_sims, strategies):
+def n_simulations(n_sims, strategies, render=None):
     i = 0
     first_catch_arr = []
     num_catches_arr = []
-    s = Simulation(adv_strategy=strategies[0], ag_strategy=strategies[1], render=None)
+    s = Simulation(adv_strategy=strategies[0], ag_strategy=strategies[1], render=render)
     while i < n_sims:
         first_catch, num_catches = s.run()
         first_catch_arr.append(first_catch)
@@ -21,7 +21,7 @@ def n_simulations(n_sims, strategies):
     return first_catch_arr, num_catches_arr
 
 
-def boxplot(datasets: list[list[int], ...], title: str, xlabels: list[str]):
+def boxplot(datasets: list[list[int]], title: str, xlabels: list[str]):
     fig, ax = plt.subplots()
     ax.boxplot(datasets)
     ax.set_xticklabels(xlabels)
@@ -42,8 +42,9 @@ def n_simulation_strategies_with_boxplots(n_sims: int, strategies_list: list[tup
 
 
 if __name__ == "__main__":    
-    #pygame.display.set_mode((100, 100))
-    n_simulation_strategies_with_boxplots(50, [('greedy','bounded'),('surround','bounded'),('intercept','bounded')])
+    pygame.display.set_mode((50, 50))
+    n_simulations(1, ('greedy', 'bounded'), render='human')
+    # n_simulation_strategies_with_boxplots(50, [('greedy','bounded'),('surround','bounded'),('intercept','bounded')])
     
     
 
