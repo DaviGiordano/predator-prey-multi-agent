@@ -60,5 +60,6 @@ def run_n_simulation_strategies_with_boxplots(n_sims: int, strategies_list: list
 
 if __name__ == "__main__":
     pygame.display.set_mode((50, 50))
+    # Select one of the two functions:
     # run_n_simulations(10, ('greedy', 'bounded'), render='human')
     run_n_simulation_strategies_with_boxplots(100, [('random','bounded'), ('greedy','bounded'),('surround','bounded'),('intercept','bounded'), ('distract_pursue','bounded'), ('q_learning','bounded')])
