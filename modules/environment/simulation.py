@@ -1,6 +1,14 @@
 from pettingzoo.mpe import simple_tag_v3
 import modules.actors.adversaries as adv
 import modules.actors.agents as ag
+from modules.actors.adversaries import BaseAdversary, DQNAdversary
+from modules.actors.utils import action_codes
+import numpy as np
+import os
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from random import randint, random
 
 CYCLES = 25
 
@@ -68,7 +76,7 @@ class Simulation:
             self._step()
         self.env.close()
 
-        # Save weights for Q-learning adversaries
+        # Save weights for Q-learning and MADDPG adversaries
         self.save_weights()
 
         if 10.0 in self['adversary_0'].reward_history:
